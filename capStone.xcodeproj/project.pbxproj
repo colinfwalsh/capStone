@@ -8,12 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		AF2DA20420B619DA0092787B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2DA20320B619DA0092787B /* AppDelegate.swift */; };
-		AF2DA20620B619DA0092787B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2DA20520B619DA0092787B /* ViewController.swift */; };
 		AF2DA20920B619DA0092787B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AF2DA20720B619DA0092787B /* Main.storyboard */; };
 		AF2DA20B20B619DA0092787B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AF2DA20A20B619DA0092787B /* Assets.xcassets */; };
 		AF2DA20E20B619DA0092787B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AF2DA20C20B619DA0092787B /* LaunchScreen.storyboard */; };
 		AF2DA21920B619DB0092787B /* capStoneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2DA21820B619DB0092787B /* capStoneTests.swift */; };
 		AF2DA22420B619DB0092787B /* capStoneUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2DA22320B619DB0092787B /* capStoneUITests.swift */; };
+		AF477E8D20B7546E0004CBC3 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF477E8C20B7546E0004CBC3 /* HomeViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,7 +36,6 @@
 /* Begin PBXFileReference section */
 		AF2DA20020B619DA0092787B /* capStone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = capStone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF2DA20320B619DA0092787B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		AF2DA20520B619DA0092787B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		AF2DA20820B619DA0092787B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		AF2DA20A20B619DA0092787B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AF2DA20D20B619DA0092787B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -47,6 +46,7 @@
 		AF2DA21F20B619DB0092787B /* capStoneUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = capStoneUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF2DA22320B619DB0092787B /* capStoneUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = capStoneUITests.swift; sourceTree = "<group>"; };
 		AF2DA22520B619DB0092787B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AF477E8C20B7546E0004CBC3 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,8 +98,8 @@
 			isa = PBXGroup;
 			children = (
 				AF2DA20320B619DA0092787B /* AppDelegate.swift */,
-				AF2DA20520B619DA0092787B /* ViewController.swift */,
 				AF2DA20720B619DA0092787B /* Main.storyboard */,
+				AF477E8C20B7546E0004CBC3 /* HomeViewController.swift */,
 				AF2DA20A20B619DA0092787B /* Assets.xcassets */,
 				AF2DA20C20B619DA0092787B /* LaunchScreen.storyboard */,
 				AF2DA20F20B619DA0092787B /* Info.plist */,
@@ -259,8 +259,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AF2DA20620B619DA0092787B /* ViewController.swift in Sources */,
 				AF2DA20420B619DA0092787B /* AppDelegate.swift in Sources */,
+				AF477E8D20B7546E0004CBC3 /* HomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
