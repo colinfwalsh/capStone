@@ -7,24 +7,22 @@
 //
 
 import UIKit
+import Firebase
 
-class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    @IBOutlet weak var tableView: UITableView?
+class ResultsViewController: UITableViewController, UISearchResultsUpdating {
+    var tempArray: [String] = []
     var testArray: [String] = ["Apple", "Candy", "Pear", "Chocolate", "Egg", "Pizza"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        tableView?.delegate = self
-        tableView?.dataSource = self
     }
     
     //Abstract this out
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return testArray.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "defaultCell", for: indexPath) as? SearchResultCell else {
             return UITableViewCell()
         }
@@ -35,9 +33,21 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
         return cell
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }
     
+    func updateSearchResults(for searchController: UISearchController) {
+        tempArray = testArray
+        if searchController.isActive && !searchController.searchBar.text!.isEmpty {
+            testArray = testArray.filter({ item in
+                return item.lowercased().contains(searchController.searchBar.text!.lowercased())
+            })
+            tableView.reloadData()
+        }
+        testArray = tempArray
+    }
+    
+
 }
 

@@ -8,39 +8,62 @@
 
 import UIKit
 import MapKit
-
+import CoreLocation
+import Firebase
 class HomeViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
-    
+    var searchController: UISearchController? = nil
+    let locationManager: CLLocationManager = CLLocationManager()
+    var count = 0
+    var ref: DatabaseReference!
     override func viewDidLoad() {
         super.viewDidLoad()
-        let resultsController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "results") as! ResultsViewController
-        let searchController = UISearchController(searchResultsController:resultsController)
-        searchController.searchResultsUpdater = self
-        searchController.hidesNavigationBarDuringPresentation = false
-        searchController.dimsBackgroundDuringPresentation = false
-        searchController.loadViewIfNeeded()
-        searchController.searchBar.sizeToFit()
-        navigationItem.searchController = searchController
-        searchController.delegate = self
+        setupSearchController()
+        setupSearchBar()
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.requestLocation()
+        ref = Database.database().reference(withPath: "test-items")
+        
+        ref.observe(.value, with: {snapshot in
+            print(snapshot.value)
+        })
     }
-  
+    func setupSearchController() {
+        let locationSearchTable = storyboard!.instantiateViewController(withIdentifier: "results") as! ResultsViewController
+        searchController = UISearchController(searchResultsController: locationSearchTable)
+        searchController?.searchResultsUpdater = locationSearchTable as UISearchResultsUpdating
+        navigationItem.searchController = searchController
+        searchController?.hidesNavigationBarDuringPresentation = false
+        searchController?.dimsBackgroundDuringPresentation = true
+        definesPresentationContext = true
+    }
+    func setupSearchBar() {
+        let searchBar = searchController!.searchBar
+        searchBar.sizeToFit()
+        searchBar.placeholder = "Search for places"
+    }
+    @IBAction func addItemToDatabase(_ sender: Any) {
+        count+=1
+        self.ref.child("item\(count)").setValue("Some text")
+    }
 }
 
-extension HomeViewController: UISearchResultsUpdating, UISearchControllerDelegate {
-    func updateSearchResults(for searchController: UISearchController) {
-        if searchController.isActive {
-            print("Active!")
+extension HomeViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status == .authorizedWhenInUse {
+            locationManager.requestLocation()
         }
     }
-
-    func willPresentSearchController(_ searchController: UISearchController) {
-        DispatchQueue.main.async {
-            searchController.searchResultsController?.view.isHidden = false
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        print(locations)
+        if let location = locations.last {
+            print("location:: \(location)")
+            mapView.setRegion(MKCoordinateRegionMake(location.coordinate, MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)), animated: true)
         }
     }
-
-    func didPresentSearchController(_ searchController: UISearchController) {
-        searchController.searchResultsController?.view.isHidden = false
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("error:: \(error)")
     }
 }

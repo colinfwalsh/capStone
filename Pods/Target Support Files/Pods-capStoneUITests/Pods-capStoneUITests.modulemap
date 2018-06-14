@@ -1,0 +1,6 @@
+framework module Pods_capStoneUITests {
+  umbrella header "Pods-capStoneUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
