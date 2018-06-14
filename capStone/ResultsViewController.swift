@@ -12,22 +12,21 @@ import Firebase
 class ResultsViewController: UITableViewController, UISearchResultsUpdating {
     var tempArray: [String] = []
     var testArray: [String] = ["Apple", "Candy", "Pear", "Chocolate", "Egg", "Pizza"]
-    
+    var data: [Any]!
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
     //Abstract this out
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return testArray.count
+        return data.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "defaultCell", for: indexPath) as? SearchResultCell else {
             return UITableViewCell()
         }
-        
-        cell.title.text = testArray[indexPath.row]
+        cell.title.text = "\(data[indexPath.row])"
         cell.subTitle.text = "This is a description of the search result"
         
         return cell

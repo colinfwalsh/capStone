@@ -18,8 +18,7 @@ class HomeViewController: UIViewController {
     var ref: DatabaseReference!
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupSearchController()
-        setupSearchBar()
+       
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
@@ -27,11 +26,24 @@ class HomeViewController: UIViewController {
         ref = Database.database().reference(withPath: "test-items")
         
         ref.observe(.value, with: {snapshot in
-            print(snapshot.value)
+            DispatchQueue.main.async {
+                var someArray: [Any] = []
+                for child in snapshot.children {
+                    someArray.append(child)
+                }
+                self.setupSearchController(with: self.initializeSearchController(withData: someArray))
+                self.setupSearchBar()
+            }
         })
     }
-    func setupSearchController() {
+    
+    func initializeSearchController(withData: [Any]) -> ResultsViewController {
         let locationSearchTable = storyboard!.instantiateViewController(withIdentifier: "results") as! ResultsViewController
+        locationSearchTable.data = withData
+        return locationSearchTable
+    }
+    func setupSearchController(with locationSearchTable: ResultsViewController) {
+        
         searchController = UISearchController(searchResultsController: locationSearchTable)
         searchController?.searchResultsUpdater = locationSearchTable as UISearchResultsUpdating
         navigationItem.searchController = searchController
@@ -46,7 +58,7 @@ class HomeViewController: UIViewController {
     }
     @IBAction func addItemToDatabase(_ sender: Any) {
         count+=1
-        self.ref.child("item\(count)").setValue("Some text")
+        self.ref.child("item\(count)").setValue("New text")
     }
 }
 
