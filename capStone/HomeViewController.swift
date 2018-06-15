@@ -10,6 +10,17 @@ import UIKit
 import MapKit
 import CoreLocation
 import Firebase
+
+struct SearchItem {
+    let searchTerm: String
+    let location: CLLocationCoordinate2D
+}
+struct User {
+    let userName: String
+    let recentSearchs: [SearchItem]
+    let geoLocation: CLLocationCoordinate2D
+    let friends: [User]
+}
 class HomeViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     var searchController: UISearchController? = nil
@@ -18,7 +29,8 @@ class HomeViewController: UIViewController {
     var ref: DatabaseReference!
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+        let defaults = UserDefaults.standard
+        print(defaults.string(forKey: "name") ?? "NO_NAME")
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
@@ -26,24 +38,20 @@ class HomeViewController: UIViewController {
         ref = Database.database().reference(withPath: "test-items")
         
         ref.observe(.value, with: {snapshot in
-            DispatchQueue.main.async {
-                var someArray: [Any] = []
-                for child in snapshot.children {
-                    someArray.append(child)
-                }
-                self.setupSearchController(with: self.initializeSearchController(withData: someArray))
-                self.setupSearchBar()
-            }
+            self.setupSearchController(with:
+                self.initializeSearchController(withData:
+                                                snapshot.children.map{$0})
+            )
+             self.setupSearchBar()
         })
+        
     }
-    
     func initializeSearchController(withData: [Any]) -> ResultsViewController {
         let locationSearchTable = storyboard!.instantiateViewController(withIdentifier: "results") as! ResultsViewController
         locationSearchTable.data = withData
         return locationSearchTable
     }
     func setupSearchController(with locationSearchTable: ResultsViewController) {
-        
         searchController = UISearchController(searchResultsController: locationSearchTable)
         searchController?.searchResultsUpdater = locationSearchTable as UISearchResultsUpdating
         navigationItem.searchController = searchController

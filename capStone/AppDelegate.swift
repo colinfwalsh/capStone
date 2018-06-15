@@ -13,11 +13,24 @@ import Firebase
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
         Database.database().isPersistenceEnabled = true
+        
+        
+        let defaults = UserDefaults.standard
+        defaults.set(false, forKey: "didLaunch")
+        if (defaults.bool(forKey: "didLaunch")) {
+            print("App has launched before")
+        } else {
+            print("App hasn't launched before")
+            defaults.set(true, forKey: "didLaunch")
+            let loginViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "login") as! LoginViewController
+            self.window = UIWindow(frame: UIScreen.main.bounds)
+            self.window?.rootViewController = loginViewController
+            self.window?.makeKeyAndVisible()
+        }
         return true
     }
 

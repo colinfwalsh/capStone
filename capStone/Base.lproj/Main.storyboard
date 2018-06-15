@@ -7,6 +7,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -109,6 +110,74 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="P1m-7t-biF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1170" y="134"/>
+        </scene>
+        <!--Login View Controller-->
+        <scene sceneID="dy1-xn-WMq">
+            <objects>
+                <viewController storyboardIdentifier="login" id="Kau-pa-Z9F" customClass="LoginViewController" customModule="capStone" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="A7H-ug-eep">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hPS-hK-98k">
+                                <rect key="frame" x="84.5" y="311.5" width="206" height="30"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password I guess? I dunno" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vrd-kW-cgc">
+                                <rect key="frame" x="84.5" y="361.5" width="206" height="30"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HHL-JR-FhP">
+                                <rect key="frame" x="164" y="411.5" width="46" height="30"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="submitTapped:" destination="Kau-pa-Z9F" eventType="touchUpInside" id="qEx-Ns-U0Q"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="App Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nw9-ck-zzx">
+                                <rect key="frame" x="108.5" y="219.5" width="158.5" height="42"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="35"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cGa-fa-Fto">
+                                <rect key="frame" x="311" y="20" width="48" height="30"/>
+                                <state key="normal" title="Cancel"/>
+                                <connections>
+                                    <action selector="cancelTapped:" destination="Kau-pa-Z9F" eventType="touchUpInside" id="8bS-BF-uTU"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="HHL-JR-FhP" firstAttribute="centerX" secondItem="vrd-kW-cgc" secondAttribute="centerX" id="4DU-Jd-LXM"/>
+                            <constraint firstItem="3oo-Xu-xyL" firstAttribute="trailing" secondItem="cGa-fa-Fto" secondAttribute="trailing" constant="16" id="9UN-pI-eXC"/>
+                            <constraint firstItem="hPS-hK-98k" firstAttribute="width" secondItem="A7H-ug-eep" secondAttribute="width" multiplier="0.55" id="CKa-Vw-xK6"/>
+                            <constraint firstItem="vrd-kW-cgc" firstAttribute="centerX" secondItem="3oo-Xu-xyL" secondAttribute="centerX" id="Cvj-MJ-AW1"/>
+                            <constraint firstItem="vrd-kW-cgc" firstAttribute="width" secondItem="hPS-hK-98k" secondAttribute="width" id="Cwp-Ld-OHY"/>
+                            <constraint firstItem="nw9-ck-zzx" firstAttribute="centerX" secondItem="hPS-hK-98k" secondAttribute="centerX" id="aaC-0d-cIV"/>
+                            <constraint firstItem="cGa-fa-Fto" firstAttribute="top" secondItem="3oo-Xu-xyL" secondAttribute="top" id="n4K-Hu-Yob"/>
+                            <constraint firstItem="vrd-kW-cgc" firstAttribute="top" secondItem="hPS-hK-98k" secondAttribute="bottom" constant="20" id="n9V-nF-Q0k"/>
+                            <constraint firstItem="HHL-JR-FhP" firstAttribute="top" secondItem="vrd-kW-cgc" secondAttribute="bottom" constant="20" id="qcS-9q-Sfh"/>
+                            <constraint firstItem="hPS-hK-98k" firstAttribute="centerX" secondItem="3oo-Xu-xyL" secondAttribute="centerX" id="tmT-lW-wJ3"/>
+                            <constraint firstItem="hPS-hK-98k" firstAttribute="centerY" secondItem="3oo-Xu-xyL" secondAttribute="centerY" multiplier="0.95" id="tqT-8L-1Ba"/>
+                            <constraint firstItem="hPS-hK-98k" firstAttribute="top" secondItem="nw9-ck-zzx" secondAttribute="bottom" constant="50" id="xTm-QH-i1p"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="3oo-Xu-xyL"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="8Lp-7X-kqN"/>
+                    <connections>
+                        <outlet property="passwordField" destination="vrd-kW-cgc" id="mwR-ZM-vGY"/>
+                        <outlet property="usernameField" destination="hPS-hK-98k" id="vbg-Rc-CZj"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lk0-XJ-Otk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="116" y="-542.87856071964018"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="PlN-RJ-TUK">
