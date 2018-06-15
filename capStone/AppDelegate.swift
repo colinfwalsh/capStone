@@ -20,12 +20,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
         let defaults = UserDefaults.standard
-        defaults.set(false, forKey: "didLaunch")
         if (defaults.bool(forKey: "didLaunch")) {
             print("App has launched before")
         } else {
             print("App hasn't launched before")
-            defaults.set(true, forKey: "didLaunch")
             let loginViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "login") as! LoginViewController
             let navigationController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "initial") as! UINavigationController
             navigationController.pushViewController(loginViewController, animated: true)

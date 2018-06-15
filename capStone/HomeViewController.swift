@@ -25,8 +25,11 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     var searchController: UISearchController? = nil
     let locationManager: CLLocationManager = CLLocationManager()
+    @IBOutlet weak var tableView: UITableView!
     var count = 0
+    @IBOutlet weak var menuConstraint: NSLayoutConstraint!
     var ref: DatabaseReference!
+    let menuDataSource = MenuDataSource()
     override func viewDidLoad() {
         super.viewDidLoad()
         let defaults = UserDefaults.standard
@@ -35,10 +38,14 @@ class HomeViewController: UIViewController {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.requestLocation()
-        
+        tableView.dataSource = menuDataSource
+        tableView.delegate = menuDataSource
         ref = Database.database().reference(withPath: "test-items")
         
+        menuConstraint.constant = -tableView.frame.width*2
+        
         ref.observe(.value, with: {snapshot in
+            //Change from init to update with a protocol to control data flow
             self.setupSearchController(with:
                 self.initializeSearchController(withData:
                                                 snapshot.children.map{$0})
@@ -46,6 +53,12 @@ class HomeViewController: UIViewController {
              self.setupSearchBar()
         })
         
+    }
+    @IBAction func menuTapped(_ sender: Any) {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.menuConstraint.constant = self.menuConstraint.constant != 0 ? 0 : -self.tableView.frame.width*2
+            self.view.layoutIfNeeded()
+        })
     }
     func initializeSearchController(withData: [Any]) -> ResultsViewController {
         let locationSearchTable = storyboard!.instantiateViewController(withIdentifier: "results") as! ResultsViewController

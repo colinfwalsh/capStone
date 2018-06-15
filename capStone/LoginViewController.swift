@@ -11,12 +11,11 @@ import UIKit
 class LoginViewController: UIViewController {
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-
     }
     @IBAction func submitTapped(_ sender: Any) {
+        UserDefaults.standard.set(true, forKey: "didLaunch")
     }
     @IBAction func cancelTapped(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
