@@ -35,6 +35,7 @@ class HomeViewController: UIViewController {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.requestLocation()
+        
         ref = Database.database().reference(withPath: "test-items")
         
         ref.observe(.value, with: {snapshot in

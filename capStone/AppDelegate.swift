@@ -27,8 +27,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("App hasn't launched before")
             defaults.set(true, forKey: "didLaunch")
             let loginViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "login") as! LoginViewController
+            let navigationController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "initial") as! UINavigationController
+            navigationController.pushViewController(loginViewController, animated: true)
             self.window = UIWindow(frame: UIScreen.main.bounds)
-            self.window?.rootViewController = loginViewController
+            self.window?.rootViewController = navigationController
+            
             self.window?.makeKeyAndVisible()
         }
         return true

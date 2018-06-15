@@ -20,5 +20,6 @@ class LoginViewController: UIViewController {
     }
     @IBAction func cancelTapped(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
+        self.navigationController?.popViewController(animated: true)
     }
 }
