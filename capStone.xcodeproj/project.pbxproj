@@ -20,6 +20,7 @@
 		AF2DA22420B619DB0092787B /* capStoneUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2DA22320B619DB0092787B /* capStoneUITests.swift */; };
 		AF400B0A20D2EBD4009B7B64 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AF400B0920D2EBD4009B7B64 /* GoogleService-Info.plist */; };
 		AF477E8D20B7546E0004CBC3 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF477E8C20B7546E0004CBC3 /* HomeViewController.swift */; };
+		AF654E1320D83DAA0099C930 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF654E1220D83DAA0099C930 /* Secrets.swift */; };
 		AFA6ED0D20D463FB00909D29 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA6ED0C20D463FB00909D29 /* LoginViewController.swift */; };
 		AFA6ED1120D4794800909D29 /* MenuDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA6ED1020D4794800909D29 /* MenuDataSource.swift */; };
 		AFA6ED1320D4799D00909D29 /* MenuHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA6ED1220D4799D00909D29 /* MenuHeaderCell.swift */; };
@@ -64,6 +65,7 @@
 		AF2DA22520B619DB0092787B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AF400B0920D2EBD4009B7B64 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		AF477E8C20B7546E0004CBC3 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		AF654E1220D83DAA0099C930 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		AFA6ED0C20D463FB00909D29 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		AFA6ED1020D4794800909D29 /* MenuDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuDataSource.swift; sourceTree = "<group>"; };
 		AFA6ED1220D4799D00909D29 /* MenuHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuHeaderCell.swift; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 				AF477E8C20B7546E0004CBC3 /* HomeViewController.swift */,
 				AF1864B620D0493A0064A25E /* ResultsViewController.swift */,
 				AF1864B220D02D5E0064A25E /* SearchResultCell.swift */,
+				AF654E1220D83DAA0099C930 /* Secrets.swift */,
 				AFA6ED0E20D4791600909D29 /* Menu */,
 				AF2DA20A20B619DA0092787B /* Assets.xcassets */,
 				AF2DA20C20B619DA0092787B /* LaunchScreen.storyboard */,
@@ -420,6 +423,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AF2DA20420B619DA0092787B /* AppDelegate.swift in Sources */,
+				AF654E1320D83DAA0099C930 /* Secrets.swift in Sources */,
 				AF1864B420D02D5E0064A25E /* SearchResultCell.swift in Sources */,
 				AF477E8D20B7546E0004CBC3 /* HomeViewController.swift in Sources */,
 				AFA6ED1120D4794800909D29 /* MenuDataSource.swift in Sources */,
