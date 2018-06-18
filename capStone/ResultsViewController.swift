@@ -9,10 +9,12 @@
 import UIKit
 import Firebase
 
-class ResultsViewController: UITableViewController, UISearchResultsUpdating {
+class ResultsViewController: UITableViewController, UISearchResultsUpdating, SenderDelegate {
     var tempArray: [String] = []
     var testArray: [String] = ["Apple", "Candy", "Pear", "Chocolate", "Egg", "Pizza"]
     var data: [Any]!
+    var delegate: CustomItemDelegate!
+    static let identifier = "resultsDataSource"
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -30,6 +32,10 @@ class ResultsViewController: UITableViewController, UISearchResultsUpdating {
         cell.subTitle.text = "This is a description of the search result"
         
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        delegate.didTapMenuItem(indexPath: indexPath, senderIdentifier: ResultsViewController.identifier)
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -8,7 +8,10 @@
 
 import Foundation
 import UIKit
-class MenuDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
+class MenuDataSource: NSObject, UITableViewDataSource, UITableViewDelegate, SenderDelegate {
+    static let identifier: String = "menuDataSource"
+    var delegate: CustomItemDelegate!
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 5
     }
@@ -19,6 +22,10 @@ class MenuDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
         cell.subtitleLabel.text = "Subtitle"
         cell.profilePicture.backgroundColor = .red
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        delegate.didTapMenuItem(indexPath: indexPath, senderIdentifier: MenuDataSource.identifier)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

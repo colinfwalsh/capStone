@@ -11,6 +11,14 @@ import MapKit
 import CoreLocation
 import Firebase
 
+protocol SenderDelegate {
+    static var identifier: String {get}
+}
+//TODO: Add seperate files for these
+protocol CustomItemDelegate {
+    func didTapMenuItem(indexPath: IndexPath, senderIdentifier: String)
+}
+
 struct SearchItem {
     let searchTerm: String
     let location: CLLocationCoordinate2D
@@ -30,10 +38,12 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var menuConstraint: NSLayoutConstraint!
     var ref: DatabaseReference!
     let menuDataSource = MenuDataSource()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let defaults = UserDefaults.standard
         print(defaults.string(forKey: "name") ?? "NO_NAME")
+        menuDataSource.delegate = self
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
@@ -63,8 +73,10 @@ class HomeViewController: UIViewController {
     func initializeSearchController(withData: [Any]) -> ResultsViewController {
         let locationSearchTable = storyboard!.instantiateViewController(withIdentifier: "results") as! ResultsViewController
         locationSearchTable.data = withData
+        locationSearchTable.delegate = self
         return locationSearchTable
     }
+  
     func setupSearchController(with locationSearchTable: ResultsViewController) {
         searchController = UISearchController(searchResultsController: locationSearchTable)
         searchController?.searchResultsUpdater = locationSearchTable as UISearchResultsUpdating
@@ -78,12 +90,13 @@ class HomeViewController: UIViewController {
         searchBar.sizeToFit()
         searchBar.placeholder = "Search for places"
     }
+    //Dummy function should be changed
     @IBAction func addItemToDatabase(_ sender: Any) {
         count+=1
         self.ref.child("item\(count)").setValue("New text")
     }
 }
-
+//TODO: Also add annnotations and such
 extension HomeViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedWhenInUse {
@@ -99,5 +112,16 @@ extension HomeViewController: CLLocationManagerDelegate {
     }
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("error:: \(error)")
+    }
+}
+
+extension HomeViewController: CustomItemDelegate {
+    func didTapMenuItem(indexPath: IndexPath, senderIdentifier: String) {
+        switch senderIdentifier {
+        case ResultsViewController.identifier:
+            print("Sending from resultsViewController! Item is \(indexPath.row)")
+        default:
+            print("Sending from menuDataSource! Item is \(indexPath.row)")
+        }
     }
 }
