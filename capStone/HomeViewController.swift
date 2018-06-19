@@ -63,28 +63,36 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let defaults = UserDefaults.standard
-        print(defaults.string(forKey: "name") ?? "NO_NAME")
         menuDataSource.delegate = self
+        
+        // Abstract this out as well - so I guess this can be a viewModel?
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.requestLocation()
+        
+        //This could possibly be set with a viewmodel as well. I wonder if this could be used to abstract the embeded datasource?
         tableView.dataSource = menuDataSource
         tableView.delegate = menuDataSource
+        
+        //This is just a test for firebase - need to fix this
         ref = Database.database().reference(withPath: "test-items")
         
+        //This is setting the left menu so it doesn't show up on initial load
         menuConstraint.constant = -tableView.frame.width*2
         
+        /* This calls an observation from the server and initializes the search controller
+           with the data from the server
+        */
         ref.observe(.value, with: {snapshot in
             //Change from init to update with a protocol to control data flow
             self.setupSearchController(with:
+                //Need to inject here
                 self.initializeSearchController(withData:
                                                 snapshot.children.map{$0})
             )
              self.setupSearchBar()
         })
-        
     }
     @IBAction func menuTapped(_ sender: Any) {
         UIView.animate(withDuration: 0.5, animations: {
@@ -101,6 +109,7 @@ class HomeViewController: UIViewController {
         return locationSearchTable
     }
   
+    //Maybe this can be set with a viewmodel as well
     func setupSearchController(with locationSearchTable: ResultsViewController) {
         searchController = UISearchController(searchResultsController: locationSearchTable)
         searchController?.searchResultsUpdater = locationSearchTable as UISearchResultsUpdating
