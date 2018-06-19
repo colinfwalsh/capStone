@@ -11,6 +11,27 @@ import MapKit
 import CoreLocation
 import Firebase
 
+//From this tutorial on MVVM -> LINK HERE
+class Observable<Element> {
+    typealias Listener = (Element) -> ()
+    var listener : Listener?
+    
+    var value: Element {
+        didSet {
+            listener?(value)
+        }
+    }
+    
+    func bind(_ listener: Listener?) {
+        self.listener = listener
+        listener?(value)
+    }
+
+    init(_ value: Element) {
+        self.value = value
+    }
+}
+
 protocol SenderDelegate {
     static var identifier: String {get}
 }
@@ -29,6 +50,7 @@ struct User {
     let geoLocation: CLLocationCoordinate2D
     let friends: [User]
 }
+
 class HomeViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     var searchController: UISearchController? = nil
@@ -72,6 +94,8 @@ class HomeViewController: UIViewController {
     }
     func initializeSearchController(withData: [Any]) -> ResultsViewController {
         let locationSearchTable = storyboard!.instantiateViewController(withIdentifier: "results") as! ResultsViewController
+        
+        //Abstract
         locationSearchTable.data = withData
         locationSearchTable.delegate = self
         return locationSearchTable
