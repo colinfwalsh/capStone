@@ -18,30 +18,24 @@ class ResultsViewController: UITableViewController, UISearchResultsUpdating, Sen
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    
     //Abstract this out
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
     }
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "defaultCell", for: indexPath) as? SearchResultCell else {
             return UITableViewCell()
         }
         cell.title.text = "\(data[indexPath.row])"
         cell.subTitle.text = "This is a description of the search result"
-        
         return cell
     }
-    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         delegate.didTapMenuItem(indexPath: indexPath, senderIdentifier: ResultsViewController.identifier)
     }
-    
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }
-    
     func updateSearchResults(for searchController: UISearchController) {
         tempArray = testArray
         if searchController.isActive && !searchController.searchBar.text!.isEmpty {
@@ -52,7 +46,5 @@ class ResultsViewController: UITableViewController, UISearchResultsUpdating, Sen
         }
         testArray = tempArray
     }
-    
-
 }
 
