@@ -11,27 +11,22 @@ import MapKit
 import CoreLocation
 import Firebase
 
-//From this tutorial on MVVM -> LINK HERE
-class Observable<Element> {
-    typealias Listener = (Element) -> ()
-    var listener : Listener?
-    
-    var value: Element {
+protocol ViewModelProtocol: class {
+    associatedtype Model
+    var modelChanged: ((Self) -> ())? {get set}
+    init(_ model: Model)
+}
+final class UserViewModel: ViewModelProtocol {
+    var user: User? {
         didSet {
-            listener?(value)
+            self.modelChanged?(self)
         }
     }
-    
-    func bind(_ listener: Listener?) {
-        self.listener = listener
-        listener?(value)
-    }
-
-    init(_ value: Element) {
-        self.value = value
+    var modelChanged: ((UserViewModel) -> ())?
+    init(_ model: User) {
+        self.user = model
     }
 }
-
 protocol SenderDelegate {
     static var identifier: String {get}
 }
@@ -39,7 +34,6 @@ protocol SenderDelegate {
 protocol CustomItemDelegate {
     func didTapMenuItem(indexPath: IndexPath, senderIdentifier: String)
 }
-
 struct SearchItem {
     let searchTerm: String
     let location: CLLocationCoordinate2D
@@ -50,7 +44,6 @@ struct User {
     let geoLocation: CLLocationCoordinate2D
     let friends: [User]
 }
-
 class HomeViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     var searchController: UISearchController? = nil
@@ -60,27 +53,21 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var menuConstraint: NSLayoutConstraint!
     var ref: DatabaseReference!
     let menuDataSource = MenuDataSource()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         menuDataSource.delegate = self
-        
         // Abstract this out as well - so I guess this can be a viewModel?
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.requestLocation()
-        
         //This could possibly be set with a viewmodel as well. I wonder if this could be used to abstract the embeded datasource?
         tableView.dataSource = menuDataSource
         tableView.delegate = menuDataSource
-        
         //This is just a test for firebase - need to fix this
         ref = Database.database().reference(withPath: "test-items")
-        
         //This is setting the left menu so it doesn't show up on initial load
         menuConstraint.constant = -tableView.frame.width*2
-        
         /* This calls an observation from the server and initializes the search controller
            with the data from the server
         */
@@ -108,7 +95,6 @@ class HomeViewController: UIViewController {
         locationSearchTable.delegate = self
         return locationSearchTable
     }
-  
     //Maybe this can be set with a viewmodel as well
     func setupSearchController(with locationSearchTable: ResultsViewController) {
         searchController = UISearchController(searchResultsController: locationSearchTable)
@@ -147,7 +133,6 @@ extension HomeViewController: CLLocationManagerDelegate {
         print("error:: \(error)")
     }
 }
-
 extension HomeViewController: CustomItemDelegate {
     func didTapMenuItem(indexPath: IndexPath, senderIdentifier: String) {
         switch senderIdentifier {
