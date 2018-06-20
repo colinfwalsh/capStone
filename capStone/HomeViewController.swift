@@ -11,22 +11,6 @@ import MapKit
 import CoreLocation
 import Firebase
 
-protocol ViewModelProtocol: class {
-    associatedtype Model
-    var modelChanged: ((Self) -> ())? {get set}
-    init(_ model: Model)
-}
-final class UserViewModel: ViewModelProtocol {
-    var user: User? {
-        didSet {
-            self.modelChanged?(self)
-        }
-    }
-    var modelChanged: ((UserViewModel) -> ())?
-    init(_ model: User) {
-        self.user = model
-    }
-}
 protocol SenderDelegate {
     static var identifier: String {get}
 }
