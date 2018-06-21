@@ -40,7 +40,8 @@ class ResultsViewController: UITableViewController, UISearchResultsUpdating, Sen
     var testArray: [String] = ["Apple", "Candy", "Pear", "Chocolate", "Egg", "Pizza"]
     var viewModel = ResultsViewModel([ResultsObject(title: "Test", items: ["test"])]) {
         didSet {
-            viewModel.didSetData? = {vm in
+            viewModel.didSetData? = {[weak self] vm in
+                guard let `self` = self else {return}
                 print(vm)
             }
         }
