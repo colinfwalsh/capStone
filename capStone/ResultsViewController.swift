@@ -5,29 +5,75 @@
 //  Created by Colin Walsh on 6/12/18.
 //  Copyright © 2018 Colin Walsh. All rights reserved.
 //
-
 import UIKit
 import Firebase
+
+protocol ViewModelProtocol: class {
+    associatedtype Element
+    var data: Element {get set}
+    var didSetData: ((Self) -> ())? {get set}
+    init(_ data: Element)
+}
+
+struct ResultsObject {
+    var title: String
+    var items: [Any]
+}
+final class ResultsViewModel: ViewModelProtocol {
+    typealias Element = [ResultsObject]
+    
+    var data: Element = Element() {
+        didSet {
+            self.didSetData?(self)
+        }
+    }
+    
+    var didSetData: ((ResultsViewModel) -> ())?
+    
+    required init(_ data: Element) {
+        self.data = data
+    }
+}
 
 class ResultsViewController: UITableViewController, UISearchResultsUpdating, SenderDelegate {
     var tempArray: [String] = []
     var testArray: [String] = ["Apple", "Candy", "Pear", "Chocolate", "Egg", "Pizza"]
-    var data: [Any]!
+    var viewModel = ResultsViewModel([ResultsObject(title: "Test", items: ["test"])]) {
+        didSet {
+            viewModel.didSetData? = {vm in
+                print(vm)
+            }
+        }
+    }
     var delegate: CustomItemDelegate!
     static let identifier = "resultsDataSource"
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     //Abstract this out
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return viewModel.data.count
+    }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data.count
+        return viewModel.data[section].items.count
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "defaultCell", for: indexPath) as? SearchResultCell else {
             return UITableViewCell()
         }
-        cell.title.text = "\(data[indexPath.row])"
-        cell.subTitle.text = "This is a description of the search result"
+        let itemToDisplay = viewModel.data[indexPath.section].items[indexPath.row]
+        var textToDisplay = ""
+        var subtitleToDisplay = ""
+        switch itemToDisplay {
+        case let itemToDisplay as YelpBusiness:
+            textToDisplay = itemToDisplay.name
+            subtitleToDisplay = itemToDisplay.alias
+        default:
+            textToDisplay = "\(itemToDisplay)"
+            subtitleToDisplay = "Placeholder text"
+        }
+        cell.title.text = textToDisplay
+        cell.subTitle.text = subtitleToDisplay
         return cell
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -47,4 +93,3 @@ class ResultsViewController: UITableViewController, UISearchResultsUpdating, Sen
         testArray = tempArray
     }
 }
-

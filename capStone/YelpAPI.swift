@@ -17,16 +17,21 @@ import CoreLocation
 public struct YelpAPI {
     private static let baseUrlString = "https://api.yelp.com/v3/"
     
-    public static func getSearchData(with searchTerm: String, locationCoordinate: CLLocationCoordinate2D, onCompletion: @escaping ([String : Any]) -> ()) {
+    static func getSearchData(with searchTerm: String, locationCoordinate: CLLocationCoordinate2D, onCompletion: @escaping (YelpBusinesses) -> ()) {
         let constructed = constructUrlStringWith(["term" : searchTerm, "latitude" : locationCoordinate.latitude, "longitude" : locationCoordinate.longitude], endpoint: "businesses", subEndpoint: "search")
         var request = URLRequest(url: URL(string: constructed)!)
         request.addValue("Bearer \(Secrets.apiKey)", forHTTPHeaderField: "Authorization")
-        print(constructed)
         let session: URLSessionDataTask = URLSession(configuration: .default).dataTask(with: request) { (data, response, error) in
-            guard let jsonData = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String : Any] else {return}
-            DispatchQueue.main.async {
-                onCompletion(jsonData!)
+            guard let data = data else {return}
+            do {
+                let yelpData = try JSONDecoder().decode(YelpBusinesses.self, from: data)
+                DispatchQueue.main.async {
+                    onCompletion(yelpData)
+                }
+            } catch let error {
+                print(error)
             }
+            
         }
         session.resume()
     }
@@ -40,31 +45,53 @@ public struct YelpAPI {
     }
 }
 
-struct Business {
-    let alias: String
-    let categories: [String]
-    let coordinates: CLLocationCoordinate2D
-    let display_phone: String
-    let distance: String
-    let id: String
-    let image_url: String
-    let is_closed: Int
-    let location: YelpLocation
-    let name: String
-    let phone: String
-    let rating: String
-    let review_count: Int
-    let transactions: [String]
-    let url: String
+struct YelpBusinesses: Codable {
+    var businesses: [YelpBusiness]
+    var total: Int
+    var region: YelpRegion
 }
 
-struct YelpLocation {
-    let address1: String
-    let address2: String
-    let address3: String
-    let city: String
-    let country: String
-    let display_address: [String]
-    let state: String
-    let zip_code: Int
+struct YelpRegion: Codable {
+    var center: YelpCoordinates
+}
+
+struct YelpCoordinates: Codable {
+    var longitude: Double
+    var latitude: Double
+}
+
+struct YelpCategories: Codable {
+    var alias: String
+    var title: String
+}
+
+struct YelpBusiness: Codable {
+    var id: String
+    var alias: String
+    var categories: [YelpCategories]
+    var coordinates: YelpCoordinates
+    var display_phone: String
+    var distance: Double
+    var image_url: String
+    var is_closed: Int
+    var location: YelpLocation
+    var name: String
+    var phone: String
+    var rating: Double
+    var review_count: Int
+    var transactions: [String]
+    var url: String
+    var price: String?
+    
+}
+
+struct YelpLocation: Codable {
+    var address1: String?
+    var address2: String?
+    var address3: String?
+    var city: String
+    var country: String
+    var display_address: [String]
+    var state: String
+    var zip_code: String
 }

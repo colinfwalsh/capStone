@@ -55,15 +55,35 @@ class HomeViewController: UIViewController {
         /* This calls an observation from the server and initializes the search controller
            with the data from the server
         */
+        let dummyChacheData = ["Cached item","Cached item"]
+        
+        
+        
+        let resultsSearchController = self.initializeSearchController(withData: [ResultsObject(title: "Test", items: ["Other test"])])
+        self.setupSearchController(with: resultsSearchController)
+        self.setupSearchBar()
         ref.observe(.value, with: {snapshot in
+            /* For recent searches, will use this code
             //Change from init to update with a protocol to control data flow
             self.setupSearchController(with:
                 //Need to inject here
                 self.initializeSearchController(withData:
                                                 snapshot.children.map{$0})
             )
-             self.setupSearchBar()
+            */
+            resultsSearchController.viewModel.data.append(ResultsObject(title: "SnapshotChildren", items: snapshot.children.allObjects))
+//            resultsSearchController.viewModel.data.updateValue(snapshot.children, forKey: "ServerCache")
+            // For current searches
+            
+            //Cool working, so now have to cache recently searched/visited/tapped and then display those results along with new results
+            // when data is entered into the search bar
+            YelpAPI.getSearchData(with: "coffee", locationCoordinate: CLLocationCoordinate2D.init(latitude: 40.7128, longitude: -74.0060)) { item in
+                
+               resultsSearchController.viewModel.data.append(ResultsObject(title: "YelpBusinesses", items: item.businesses))
+
+            }
         })
+       
     }
     @IBAction func menuTapped(_ sender: Any) {
         UIView.animate(withDuration: 0.5, animations: {
@@ -71,11 +91,11 @@ class HomeViewController: UIViewController {
             self.view.layoutIfNeeded()
         })
     }
-    func initializeSearchController(withData: [Any]) -> ResultsViewController {
+    func initializeSearchController(withData: [ResultsObject]) -> ResultsViewController {
         let locationSearchTable = storyboard!.instantiateViewController(withIdentifier: "results") as! ResultsViewController
         
         //Abstract
-        locationSearchTable.data = withData
+        locationSearchTable.viewModel.data = withData
         locationSearchTable.delegate = self
         return locationSearchTable
     }
@@ -92,6 +112,7 @@ class HomeViewController: UIViewController {
         let searchBar = searchController!.searchBar
         searchBar.sizeToFit()
         searchBar.placeholder = "Search for places"
+        searchBar.delegate = self
     }
     //Dummy function should be changed
     @IBAction func addItemToDatabase(_ sender: Any) {
@@ -125,5 +146,12 @@ extension HomeViewController: CustomItemDelegate {
         default:
             print("Sending from menuDataSource! Item is \(indexPath.row)")
         }
+    }
+}
+
+extension HomeViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        //Call the delegate to update search results
+        print(searchText)
     }
 }

@@ -18,8 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
         Database.database().isPersistenceEnabled = true
-        
-        
+
         let defaults = UserDefaults.standard
         if (defaults.bool(forKey: "didLaunch")) {
             print("App has launched before")
@@ -30,13 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             navigationController.pushViewController(loginViewController, animated: true)
             self.window = UIWindow(frame: UIScreen.main.bounds)
             self.window?.rootViewController = navigationController
-            
             self.window?.makeKeyAndVisible()
-            
-        }
-        
-        YelpAPI.getSearchData(with: "deli", locationCoordinate: CLLocationCoordinate2D.init(latitude: 40.7128, longitude: -74.0060)) { item in
-            print(item)
         }
         
         return true
