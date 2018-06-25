@@ -56,34 +56,16 @@ class HomeViewController: UIViewController {
            with the data from the server
         */
         let dummyChacheData = ["Cached item","Cached item"]
-        
-        
-        
         let resultsSearchController = self.initializeSearchController(withData: [ResultsObject(title: "Test", items: ["Other test"])])
         self.setupSearchController(with: resultsSearchController)
         self.setupSearchBar()
         ref.observe(.value, with: {snapshot in
-            /* For recent searches, will use this code
-            //Change from init to update with a protocol to control data flow
-            self.setupSearchController(with:
-                //Need to inject here
-                self.initializeSearchController(withData:
-                                                snapshot.children.map{$0})
-            )
-            */
+            //This will not work, appending this data to the array in the viewModel does not make the data reactive. Maybe two arrays?  Staging and live, change state based off query
             resultsSearchController.viewModel.data.append(ResultsObject(title: "SnapshotChildren", items: snapshot.children.allObjects))
-//            resultsSearchController.viewModel.data.updateValue(snapshot.children, forKey: "ServerCache")
-            // For current searches
-            
-            //Cool working, so now have to cache recently searched/visited/tapped and then display those results along with new results
-            // when data is entered into the search bar
-            YelpAPI.getSearchData(with: "coffee", locationCoordinate: CLLocationCoordinate2D.init(latitude: 40.7128, longitude: -74.0060)) { item in
-                
-               resultsSearchController.viewModel.data.append(ResultsObject(title: "YelpBusinesses", items: item.businesses))
-
-            }
         })
-       
+        YelpAPI.getSearchData(with: "coffee", locationCoordinate: CLLocationCoordinate2D.init(latitude: 40.7128, longitude: -74.0060)) { item in
+            resultsSearchController.viewModel.data.append(ResultsObject(title: "YelpBusinesses", items: item.businesses))
+        }
     }
     @IBAction func menuTapped(_ sender: Any) {
         UIView.animate(withDuration: 0.5, animations: {
@@ -93,9 +75,9 @@ class HomeViewController: UIViewController {
     }
     func initializeSearchController(withData: [ResultsObject]) -> ResultsViewController {
         let locationSearchTable = storyboard!.instantiateViewController(withIdentifier: "results") as! ResultsViewController
-        
+        let resultsVM = ResultsViewModel(withData)
         //Abstract
-        locationSearchTable.viewModel.data = withData
+        locationSearchTable.viewModel = resultsVM
         locationSearchTable.delegate = self
         return locationSearchTable
     }
@@ -117,7 +99,8 @@ class HomeViewController: UIViewController {
     //Dummy function should be changed
     @IBAction func addItemToDatabase(_ sender: Any) {
         count+=1
-        self.ref.child("item\(count)").setValue("New text")
+//        self.ref.child("item\(count)").setValue("New text")
+        
     }
 }
 //TODO: Also add annnotations and such

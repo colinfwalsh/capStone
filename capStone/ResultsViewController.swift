@@ -38,11 +38,13 @@ final class ResultsViewModel: ViewModelProtocol {
 class ResultsViewController: UITableViewController, UISearchResultsUpdating, SenderDelegate {
     var tempArray: [String] = []
     var testArray: [String] = ["Apple", "Candy", "Pear", "Chocolate", "Egg", "Pizza"]
-    var viewModel = ResultsViewModel([ResultsObject(title: "Test", items: ["test"])]) {
+    
+    var viewModel: ResultsViewModel! {
         didSet {
-            viewModel.didSetData? = {[weak self] vm in
-                guard let `self` = self else {return}
-                print(vm)
+            viewModel.didSetData? = {[unowned self] vm in
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }
         }
     }
