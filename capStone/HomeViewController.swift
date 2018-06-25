@@ -40,11 +40,18 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         menuDataSource.delegate = self
-        // Abstract this out as well - so I guess this can be a?
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+
+        // All this should be in it's own method
+        
+        locationManager.requestAlwaysAuthorization()
         locationManager.requestWhenInUseAuthorization()
-        locationManager.requestLocation()
+        
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.startUpdatingLocation()
+        }
+        
         //This could possibly be set with a viewmodel as well. I wonder if this could be used to abstract the embeded datasource?
         tableView.dataSource = menuDataSource
         tableView.delegate = menuDataSource
@@ -63,9 +70,11 @@ class HomeViewController: UIViewController {
             //This will not work, appending this data to the array in the does not make the data reactive. Maybe two arrays?  Staging and live, change state based off query
             resultsSearchController.data.append(ResultsObject(title: "SnapshotChildren", items: snapshot.children.allObjects))
         })
-        YelpAPI.getSearchData(with: "coffee", locationCoordinate: CLLocationCoordinate2D.init(latitude: 40.7128, longitude: -74.0060)) { item in
+        /*
+        YelpAPI.getSearchData(with: "coffee", locationCoordinate: )) { item in
             resultsSearchController.data.append(ResultsObject(title: "YelpBusinesses", items: item.businesses))
         }
+        */
     }
     @IBAction func menuTapped(_ sender: Any) {
         UIView.animate(withDuration: 0.5, animations: {
@@ -110,10 +119,18 @@ extension HomeViewController: CLLocationManagerDelegate {
         }
     }
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print(locations)
         if let location = locations.last {
-            print("location:: \(location)")
             mapView.setRegion(MKCoordinateRegionMake(location.coordinate, MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)), animated: true)
+            YelpAPI.getSearchData(with: "", locationCoordinate: location.coordinate) { item in
+                var annotations: [MKPointAnnotation] = []
+                for item in item.businesses {
+                    let annotation = MKPointAnnotation()
+                    annotation.coordinate = CLLocationCoordinate2D(latitude: item.coordinates.latitude, longitude: item.coordinates.longitude)
+                    annotation.title = item.name
+                    annotations.append(annotation)
+                }
+                self.mapView.addAnnotations(annotations)
+            }
         }
     }
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
