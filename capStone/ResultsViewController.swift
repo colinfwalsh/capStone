@@ -8,43 +8,19 @@
 import UIKit
 import Firebase
 
-protocol ViewModelProtocol: class {
-    associatedtype Element
-    var data: Element {get set}
-    var didSetData: ((Self) -> ())? {get set}
-    init(_ data: Element)
-}
-
 struct ResultsObject {
     var title: String
     var items: [Any]
-}
-final class ResultsViewModel: ViewModelProtocol {
-    typealias Element = [ResultsObject]
-    
-    var data: Element = Element() {
-        didSet {
-            self.didSetData?(self)
-        }
-    }
-    
-    var didSetData: ((ResultsViewModel) -> ())?
-    
-    required init(_ data: Element) {
-        self.data = data
-    }
 }
 
 class ResultsViewController: UITableViewController, UISearchResultsUpdating, SenderDelegate {
     var tempArray: [String] = []
     var testArray: [String] = ["Apple", "Candy", "Pear", "Chocolate", "Egg", "Pizza"]
     
-    var viewModel: ResultsViewModel! {
+    var data: [ResultsObject]! {
         didSet {
-            viewModel.didSetData? = {[unowned self] vm in
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
             }
         }
     }
@@ -55,16 +31,17 @@ class ResultsViewController: UITableViewController, UISearchResultsUpdating, Sen
     }
     //Abstract this out
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return viewModel.data.count
+        return data.count
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.data[section].items.count
+        return data[section].items.count
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "defaultCell", for: indexPath) as? SearchResultCell else {
             return UITableViewCell()
         }
-        let itemToDisplay = viewModel.data[indexPath.section].items[indexPath.row]
+        let itemToDisplay = data[indexPath.section].items[indexPath.row]
+        // Change all of this
         var textToDisplay = ""
         var subtitleToDisplay = ""
         switch itemToDisplay {

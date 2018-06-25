@@ -40,7 +40,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         menuDataSource.delegate = self
-        // Abstract this out as well - so I guess this can be a viewModel?
+        // Abstract this out as well - so I guess this can be a?
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
@@ -60,11 +60,11 @@ class HomeViewController: UIViewController {
         self.setupSearchController(with: resultsSearchController)
         self.setupSearchBar()
         ref.observe(.value, with: {snapshot in
-            //This will not work, appending this data to the array in the viewModel does not make the data reactive. Maybe two arrays?  Staging and live, change state based off query
-            resultsSearchController.viewModel.data.append(ResultsObject(title: "SnapshotChildren", items: snapshot.children.allObjects))
+            //This will not work, appending this data to the array in the does not make the data reactive. Maybe two arrays?  Staging and live, change state based off query
+            resultsSearchController.data.append(ResultsObject(title: "SnapshotChildren", items: snapshot.children.allObjects))
         })
         YelpAPI.getSearchData(with: "coffee", locationCoordinate: CLLocationCoordinate2D.init(latitude: 40.7128, longitude: -74.0060)) { item in
-            resultsSearchController.viewModel.data.append(ResultsObject(title: "YelpBusinesses", items: item.businesses))
+            resultsSearchController.data.append(ResultsObject(title: "YelpBusinesses", items: item.businesses))
         }
     }
     @IBAction func menuTapped(_ sender: Any) {
@@ -75,9 +75,8 @@ class HomeViewController: UIViewController {
     }
     func initializeSearchController(withData: [ResultsObject]) -> ResultsViewController {
         let locationSearchTable = storyboard!.instantiateViewController(withIdentifier: "results") as! ResultsViewController
-        let resultsVM = ResultsViewModel(withData)
         //Abstract
-        locationSearchTable.viewModel = resultsVM
+        locationSearchTable.data = withData
         locationSearchTable.delegate = self
         return locationSearchTable
     }
